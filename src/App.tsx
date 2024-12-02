@@ -2,8 +2,8 @@ import "./App.css";
 import Events from "./components/Events";
 import NavBar from "./components/Navbar";
 import { Routes, Route } from "react-router-dom";
-import Login from "./components/Login";
-import Registration from "./components/Registration";
+import {Login} from "./components/UserLogin";
+import {Signup} from "./components/UserSignup";
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Events />}></Route>
         <Route path="/login" element={<Login />}></Route>
-        <Route path="/register" element={<Registration/>}></Route>
+        <Route path="/register" element={<Signup/>}></Route>
       </Routes>
     </div>
   );
