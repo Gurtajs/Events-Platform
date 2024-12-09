@@ -1,13 +1,13 @@
-import {useState} from 'react';
+import {useState, useContext} from 'react';
+import { AuthContext } from "../AuthContext";
 import {  signInWithEmailAndPassword} from 'firebase/auth';
 import {  useNavigate } from 'react-router-dom'
-import {auth} from '../firebase.js'
 import { Link } from "react-router-dom"
 
 const Login = () => {
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const { email, setEmail, password, setPassword, auth } =
+    useContext(AuthContext);
 
     const onLogin = (e:any) => {
         e.preventDefault();
