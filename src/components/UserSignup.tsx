@@ -43,9 +43,9 @@ const Signup = () => {
             <input className="border-2" type="text" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} />
             <label htmlFor='age'>Age</label>
             <input className="border-2" type="number" id="age" value={age} onChange={(e) => setAge(e.target.value)} />
-             <label htmlFor='firstName'>Email</label>
+             <label htmlFor='email'>Email</label>
              <input className="border-2" type="text" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-             <label htmlFor='firstName'>Password</label>
+             <label htmlFor='password'>Password</label>
              <input className="border-2" type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <button type="submit" onClick={onSubmit}>Register</button>
           </form>
