@@ -3,101 +3,181 @@ import { getAllEvents } from "../apiRequests";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [eventStates, setEventStates] = useState<any>({}); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const CLIENT_ID =
+    "354123669066-23tenv5a4ecn8d0nl2ia0n5nooh0obvb.apps.googleusercontent.com";
+  const SCOPES = "https://www.googleapis.com/auth/calendar.events";
+
+  let tokenClient: any;
 
   useEffect(() => {
     getAllEvents().then((events) => {
       setEvents(events);
+      const initialStates = events.reduce((acc, event) => {
+        acc[event.event_id] = {
+          showLoginButton: true,
+          showSignUpButton: false,
+          loginMessage: false,
+          signUpMessage: false,
+        };
+        return acc;
+      }, {});
+      setEventStates(initialStates);
     });
+
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      console.log("GIS script loaded successfully.");
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
   }, []);
 
-  let gapi = (window as any).gapi
-  let CLIENT_ID = "354123669066-23tenv5a4ecn8d0nl2ia0n5nooh0obvb.apps.googleusercontent.com"
-  let API_KEY = "AIzaSyCsDymlgEQYtegh8ahFEHizs0ka6RLA_Rk";
-
-  let DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
-  let SCOPES = "https://www.googleapis.com/auth/calendar.events";
-
-  const handleClick = () => {
-    gapi.load('client: auth2', () => {
-      console.log('loaded client')
-
-      gapi.client.init({
-        apiKey: API_KEY,
-        clientId: CLIENT_ID,
-        discoveryDocs: DISCOVERY_DOCS,
+  const handleClick = async (event: any) => {
+    const eventId = event.event_id;
+    if (!accessToken) {
+      console.log("Initializing Token Client...");
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
         scope: SCOPES,
-  }).then(() => {console.log('Google API Initialised')})
-
-
-  gapi.client.load('calendar', 'v3', () => console.log('bam!'))
-
-  const authInstance = gapi.auth2.getAuthInstance();
-      if (authInstance) {
-  authInstance.signIn().then(() => {
-      let event = {
-        'summary': 'Google I/O 2015',
-        'location': '800 Howard St., San Francisco, CA 94103',
-        'description': 'A chance to hear more about Google\'s developer products.',
-        'start': {
-          'dateTime': '2015-05-28T09:00:00-07:00',
-          'timeZone': 'America/Los_Angeles'
+        callback: async (tokenResponse: any) => {
+          console.log("Token Response:", tokenResponse);
+          if (tokenResponse.access_token) {
+            setAccessToken(tokenResponse.access_token); 
+            setIsLoggedIn(true); 
+            setEventStates((prevState) => {
+              const updatedStates = {};
+              for (const eventId in prevState) {
+                updatedStates[eventId] = {
+                  ...prevState[eventId],
+                  showLoginButton: false,
+                  loginMessage: false, 
+                  showSignUpButton: true,
+                };
+              }
+              return updatedStates;
+            });
+          } else {
+            console.error("No access token received!");
+          }
         },
-        'end': {
-          'dateTime': '2015-05-28T17:00:00-07:00',
-          'timeZone': 'America/Los_Angeles'
-        },
-        'recurrence': [
-          'RRULE:FREQ=DAILY;COUNT=2'
-        ],
-        'attendees': [
-          {'email': 'lpage@example.com'},
-          {'email': 'sbrin@example.com'}
-        ],
-        'reminders': {
-          'useDefault': false,
-          'overrides': [
-            {'method': 'email', 'minutes': 24 * 60},
-            {'method': 'popup', 'minutes': 10}
-          ]
+      });
+      tokenClient.requestAccessToken();
+    } else {
+      await addEventToCalendar(event);
+    }
+  };
+
+  const addEventToCalendar = async (event: any) => {
+    const eventId = event.event_id;
+    if (!accessToken) {
+      console.error("User is not authenticated!");
+      return;
+    }
+
+    const googleEvent = {
+      summary: event.title,
+      location: event.location,
+      description: event.description,
+      start: {
+        dateTime: event.date,
+      },
+      end: {
+        dateTime: new Date(
+          new Date(event.date).getTime() + 60 * 60 * 1000
+        ).toISOString(), 
+      },
+    };
+
+    try {
+      const response = await fetch(
+        "https://www.googleapis.com/calendar/v3/calendars/primary/events",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(googleEvent),
         }
-      };
-      let request = gapi.client.calendar.events.insert({
-        'calendarId': 'primary',
-        'resource': event,
-      })
+      );
 
-      request.execute(event => {
-        console.log(event)
-        window.open(event.htmlLink)
-      })
-    })}
-  })
-  }
+      if (response.ok) {
+        const result = await response.json();
+        setEventStates((prevState) => ({
+          ...prevState,
+          [eventId]: {
+            ...prevState[eventId],
+            showSignUpButton: false,
+            signUpMessage: true,
+          },
+        }));
+        console.log("Event created successfully:", result);
+      } else {
+        console.error("Error creating event:", response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div>
       <div className="flex flex-wrap gap-[120px] mt-10 ml-20">
-      {events.map((event) => (
-        <div key={(event as any).event_id} className="border-2 rounded-md border-black h-[250px] p-3">
-          <p className="font-semibold">{(event as any).title}</p>
-          <p>{(event as any).description}</p>
-          <p>Location: {(event as any).location}</p>
-          <p>Capacity: {(event as any).capacity}</p>
-          <p>Organiser: {(event as any).organiser}</p>
-          <p>Date: 
-            {" " + (event as any).date[8] +
-              (event as any).date[9] +
-              "-" +
-              (event as any).date[5] +
-              (event as any).date[6] +
-              "-" +
-              (event as any).date[0] +
-              (event as any).date[1] +
-              (event as any).date[2] +
-              (event as any).date[3]}</p>
-          <div className="flex ml-[55px] mt-5"><button className="border border-gray-400 hover:border-blue-500 rounded px-4 py-2" onClick={handleClick}>Sign up for this event</button></div>
-        </div>
-      ))}
+        {events.map((event: any) => (
+          <div
+            key={event.event_id}
+            className="border-2 rounded-md border-black h-[250px] w-[350px] p-3"
+          >
+            <p className="font-semibold">{event.title}</p>
+            <p>{event.description}</p>
+            <p>Location: {event.location}</p>
+            <p>Capacity: {event.capacity}</p>
+            <p>Organiser: {event.organiser}</p>
+            <p>
+              Date:{" "}
+              {event.date[8] +
+                event.date[9] +
+                "-" +
+                event.date[5] +
+                event.date[6] +
+                "-" +
+                event.date[0] +
+                event.date[1] +
+                event.date[2] +
+                event.date[3]}
+            </p>
+            <div className="mt-5 flex flex-col">
+              {eventStates[event.event_id]?.showLoginButton && !isLoggedIn && (
+                <button
+                  className="border border-gray-400 hover:border-blue-500 rounded px-4 py-2"
+                  onClick={() => handleClick(event)}
+                >
+                  Login to Google Email to Sign up
+                </button>
+              )}
+              {eventStates[event.event_id]?.showSignUpButton && isLoggedIn && (
+                <button
+                  className="border border-gray-400 hover:border-blue-500 rounded px-4 py-2"
+                  onClick={() => addEventToCalendar(event)} 
+                >
+                  Add event to Google Calendar
+                </button>
+              )}
+              {eventStates[event.event_id]?.signUpMessage && (
+                <p className="text-green-500 mt-2">You have successfully signed up for this event!</p>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
