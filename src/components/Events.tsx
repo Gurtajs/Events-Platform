@@ -4,8 +4,9 @@ import { getAllEvents } from "../apiRequests";
 export default function Events() {
   const [events, setEvents] = useState([]);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [eventStates, setEventStates] = useState<any>({}); 
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [eventStates, setEventStates] = useState<any>({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLoginMessage, setShowLoginMessage] = useState(false); // Track login message visibility
   const CLIENT_ID =
     "354123669066-23tenv5a4ecn8d0nl2ia0n5nooh0obvb.apps.googleusercontent.com";
   const SCOPES = "https://www.googleapis.com/auth/calendar.events";
@@ -51,15 +52,16 @@ export default function Events() {
         callback: async (tokenResponse: any) => {
           console.log("Token Response:", tokenResponse);
           if (tokenResponse.access_token) {
-            setAccessToken(tokenResponse.access_token); 
-            setIsLoggedIn(true); 
+            setAccessToken(tokenResponse.access_token);
+            setIsLoggedIn(true);
+            setShowLoginMessage(true); 
             setEventStates((prevState) => {
               const updatedStates = {};
               for (const eventId in prevState) {
                 updatedStates[eventId] = {
                   ...prevState[eventId],
                   showLoginButton: false,
-                  loginMessage: false, 
+                  loginMessage: false,
                   showSignUpButton: true,
                 };
               }
@@ -93,7 +95,7 @@ export default function Events() {
       end: {
         dateTime: new Date(
           new Date(event.date).getTime() + 60 * 60 * 1000
-        ).toISOString(), 
+        ).toISOString(),
       },
     };
 
@@ -120,6 +122,7 @@ export default function Events() {
             signUpMessage: true,
           },
         }));
+        setShowLoginMessage(false); 
         console.log("Event created successfully:", result);
       } else {
         console.error("Error creating event:", response.status, response.statusText);
@@ -131,7 +134,13 @@ export default function Events() {
 
   return (
     <div>
+       {showLoginMessage && isLoggedIn && (
+        <p className="text-green-500 mt-5 ml-20">
+          You have successfully logged in your Google email!
+        </p>
+      )}
       <div className="flex flex-wrap gap-[120px] mt-10 ml-20">
+        
         {events.map((event: any) => (
           <div
             key={event.event_id}
@@ -161,19 +170,21 @@ export default function Events() {
                   className="border border-gray-400 hover:border-blue-500 rounded px-4 py-2"
                   onClick={() => handleClick(event)}
                 >
-                  Login to Google Email to Sign up
+                  Login to your Google email to Sign up
                 </button>
               )}
               {eventStates[event.event_id]?.showSignUpButton && isLoggedIn && (
                 <button
                   className="border border-gray-400 hover:border-blue-500 rounded px-4 py-2"
-                  onClick={() => addEventToCalendar(event)} 
+                  onClick={() => addEventToCalendar(event)}
                 >
                   Add event to Google Calendar
                 </button>
               )}
               {eventStates[event.event_id]?.signUpMessage && (
-                <p className="text-green-500 mt-2">You have successfully signed up for this event!</p>
+                <p className="text-green-500 mt-2">
+                  You have successfully signed up for this event!
+                </p>
               )}
             </div>
           </div>
