@@ -58,8 +58,19 @@ function postEventByUser(user_id: number, title: string, description: string, lo
     organiser,
   }).then((response) => {
     console.log(response);
-    response.data.user;
+    return response.data.user;
   });
+}
+
+function postToGoogleCalendar(title: string, location: string, date: string, organiser: string) {
+  return axios.post("http://localhost:9090/api/add-event", {
+    title,
+    location,
+    date,
+    organiser,
+  }).then((response) => {
+    return response.data
+  })
 }
 
 export {
@@ -68,5 +79,6 @@ export {
   getUserByEmail,
   getEventsByUser,
   deleteEvent,
-  postEventByUser
+  postEventByUser,
+  postToGoogleCalendar
 };
