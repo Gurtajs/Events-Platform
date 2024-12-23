@@ -6,9 +6,8 @@ export default function Events() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [eventStates, setEventStates] = useState<any>({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLoginMessage, setShowLoginMessage] = useState(false); // Track login message visibility
-  const CLIENT_ID =
-    "354123669066-23tenv5a4ecn8d0nl2ia0n5nooh0obvb.apps.googleusercontent.com";
+  const [showLoginMessage, setShowLoginMessage] = useState(false); 
+  const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
   const SCOPES = "https://www.googleapis.com/auth/calendar.events";
 
   let tokenClient: any;
