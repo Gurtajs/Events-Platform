@@ -1,7 +1,7 @@
 import axios from "axios";
 
 function getAllEvents() {
-  return axios.get("http://localhost:9090/api/events").then((response) => {
+  return axios.get("https://events-platform-be-4f92.onrender.com/api/events").then((response) => {
     return response.data.events;
   });
 }
@@ -13,7 +13,7 @@ function postUser(
   email: string
 ) {
   return axios
-    .post("http://localhost:9090/api/users", {
+    .post("https://events-platform-be-4f92.onrender.com/api/users", {
       first_name,
       last_name,
       age,
@@ -27,7 +27,7 @@ function postUser(
 
 function getUserByEmail(email: string) {
   return axios
-    .get(`http://localhost:9090/api/users/emails/${email}`)
+    .get(`https://events-platform-be-4f92.onrender.com/api/users/emails/${email}`)
     .then((response) => {
       return response.data.user;
     });
@@ -35,7 +35,7 @@ function getUserByEmail(email: string) {
 
 function getEventsByUser(user_id: number) {
   return axios
-    .get(`http://localhost:9090/api/users/${user_id}/events`)
+    .get(`https://events-platform-be-4f92.onrender.com/api/users/${user_id}/events`)
     .then((response) => {
       return response.data.events;
     });
@@ -43,12 +43,12 @@ function getEventsByUser(user_id: number) {
 
 function deleteEvent(user_id: number, event_id: number) {
   return axios.delete(
-    `http://localhost:9090/api/users/${user_id}/events/${event_id}`
+    `https://events-platform-be-4f92.onrender.com/api/users/${user_id}/events/${event_id}`
   );
 }
 
 function postEventByUser(user_id: number, title: string, description: string, location: string, date: string, capacity: string, organiser: string) {
-  return axios.post(`http://localhost:9090/api/users/${user_id}/events`, {
+  return axios.post(`https://events-platform-be-4f92.onrender.com/api/users/${user_id}/events`, {
     user_id,
     title,
     description,
@@ -63,7 +63,7 @@ function postEventByUser(user_id: number, title: string, description: string, lo
 }
 
 function postToGoogleCalendar(title: string, location: string, date: string, organiser: string) {
-  return axios.post("http://localhost:9090/api/add-event", {
+  return axios.post("https://events-platform-be-4f92.onrender.com/api/add-event", {
     title,
     location,
     date,
