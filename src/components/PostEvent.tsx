@@ -1,7 +1,7 @@
 import { useState } from "react"
 import {postEventByUser} from "../apiRequests"
 
-export default function PostEvent({userDetails}) {
+export default function PostEvent({userDetails}: any) {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [location, setLocation] = useState("")

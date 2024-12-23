@@ -42,7 +42,7 @@ const Signup = () => {
       }
   
       // Age validation
-      if (!age || isNaN(age) || age <= 0) {
+      if (!age || Number(age) <= 0) {
         setAgeMessage("Please enter a valid age.");
         isValid = false;
       } else {
@@ -75,9 +75,8 @@ const Signup = () => {
       if (!isValid) return;
   
       await createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(() => {
             // Signed in
-            const user = userCredential.user;
             postUser(firstName, lastName, age, email)
             navigate("/login")
             // ...

@@ -5,7 +5,7 @@ import {useNavigate } from 'react-router-dom';
 import PostEvent from "./PostEvent";
 
 export default function UserHome() {
-  const { email, setEmail } = useContext(AuthContext);
+  const { email } = useContext(AuthContext);
   const [userDetails, setUserDetails] = useState([]);
   const [eventsByUser, setEventsbyUser] = useState([]);
   const [show, setShow] = useState(false)

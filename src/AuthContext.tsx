@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
+// @ts-ignore
 import {firebaseConfig} from "../src/firebase.js"
 import { getAuth } from "firebase/auth";
 

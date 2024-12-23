@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+
+
+declare const google: any;
 import { getAllEvents } from "../apiRequests";
 
 export default function Events() {
@@ -15,7 +18,7 @@ export default function Events() {
   useEffect(() => {
     getAllEvents().then((events) => {
       setEvents(events);
-      const initialStates = events.reduce((acc, event) => {
+      const initialStates = events.reduce((acc: any, event:any) => {
         acc[event.event_id] = {
           showLoginButton: true,
           showSignUpButton: false,
@@ -42,7 +45,6 @@ export default function Events() {
   }, []);
 
   const handleClick = async (event: any) => {
-    const eventId = event.event_id;
     if (!accessToken) {
       console.log("Initializing Token Client...");
       tokenClient = google.accounts.oauth2.initTokenClient({
@@ -54,8 +56,8 @@ export default function Events() {
             setAccessToken(tokenResponse.access_token);
             setIsLoggedIn(true);
             setShowLoginMessage(true); 
-            setEventStates((prevState) => {
-              const updatedStates = {};
+            setEventStates((prevState: any) => {
+              const updatedStates: { [key: string]: any } = {};
               for (const eventId in prevState) {
                 updatedStates[eventId] = {
                   ...prevState[eventId],
@@ -113,7 +115,7 @@ export default function Events() {
 
       if (response.ok) {
         const result = await response.json();
-        setEventStates((prevState) => ({
+        setEventStates((prevState: any) => ({
           ...prevState,
           [eventId]: {
             ...prevState[eventId],
