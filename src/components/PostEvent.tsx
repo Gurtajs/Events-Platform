@@ -1,7 +1,7 @@
 import { useState } from "react"
 import {postEventByUser} from "../apiRequests"
 
-export default function PostEvent({userDetails}: any) {
+export default function PostEvent({userDetails, setEventsbyUser}: any) {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [location, setLocation] = useState("")
@@ -80,7 +80,16 @@ export default function PostEvent({userDetails}: any) {
       location,
       date,
       capacity,
-      organiser)
+      organiser).then((newEvent) => {
+        console.log(newEvent)
+      setEventsbyUser((prevEvents: any) => [...prevEvents, newEvent]);
+      setTitle("");
+      setDescription("");
+      setLocation("");
+      setDate("");
+      setCapacity("");
+      setOrganiser("");
+  })
   }
 
   return(

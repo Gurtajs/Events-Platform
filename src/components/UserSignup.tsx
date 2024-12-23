@@ -18,6 +18,7 @@ const Signup = () => {
     const [ageMessage, setAgeMessage] = useState("");
     const [emailMessage, setEmailMessage] = useState("");
     const [passwordMessage, setPasswordMessage] = useState("");
+    const [emailAlreadyInUse, setEmailAlreadyInUse] = useState(false); 
 
     const onSubmit = async (e: any) => {
 
@@ -85,8 +86,14 @@ const Signup = () => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorCode, errorMessage);
-            // ..
-        });
+            if (errorCode === "auth/email-already-in-use") {
+              setEmailAlreadyInUse(true);
+        }
+        else {
+          setEmailAlreadyInUse(false);
+        }
+        }
+      );
     }
 
     return(
@@ -132,8 +139,8 @@ const Signup = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          {emailMessage && <p style={{ color: "red" }}>{emailMessage}</p>}
-
+           {emailMessage && <p style={{ color: "red" }}>{emailMessage}</p>}
+           {emailAlreadyInUse ? <p style={{ color: "red" }}>Email already in use</p> : ""}
           <label htmlFor="password">Password</label>
           <input
             className="border-2"

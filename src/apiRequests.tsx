@@ -58,7 +58,7 @@ function postEventByUser(user_id: number, title: string, description: string, lo
     organiser,
   }).then((response) => {
     console.log(response);
-    return response.data.user;
+    return response.data.event;
   });
 }
 

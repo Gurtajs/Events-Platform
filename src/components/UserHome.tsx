@@ -3,17 +3,21 @@ import { AuthContext } from "../AuthContext";
 import { useContext, useState, useEffect } from "react";
 import {useNavigate } from 'react-router-dom';
 import PostEvent from "./PostEvent";
+import loader from "../assets/loading.gif"
 
 export default function UserHome() {
   const { email } = useContext(AuthContext);
   const [userDetails, setUserDetails] = useState([]);
   const [eventsByUser, setEventsbyUser] = useState([]);
   const [show, setShow] = useState(false)
+  const [loading, setLoading] = useState(true)
+
   const navigate = useNavigate();
   useEffect(() => {
     if (email) {
       getUserByEmail(email).then((user) => {
         setUserDetails(user);
+        setLoading(false)
       });
     }
   }, [email]);
@@ -22,9 +26,10 @@ export default function UserHome() {
     if ((userDetails as any).user_id) {
       getEventsByUser((userDetails as any).user_id).then((events) => {
         setEventsbyUser(events);
+        setLoading(false)
       });
     }
-  }, [(userDetails as any).user_id, eventsByUser]);
+  }, [(userDetails as any).user_id]);
 
   const deleteEventButton = (eventId: number) => {
     deleteEvent((userDetails as any).user_id, eventId)
@@ -41,15 +46,17 @@ export default function UserHome() {
   const logout = () => {
     navigate("/")
   }
-
+  if (loading) {
+    return   <div className="flex justify-center mt-20"><img src={loader} alt="loader" width={100} height={100}/></div>
+  }
   return (
     <div className="ml-20">
       <h1 className="font-semibold mt-5 mb-5">Welcome back {(userDetails as any).first_name}</h1>
-      <h2 className="mb-3">Here are your events:</h2>
+      {eventsByUser.length ? <h2 className="mb-3">Here are your events:</h2> :  <h2 className="mb-3">You have no events yet</h2>}
       <div className="flex flex-wrap gap-[120px]">
       {eventsByUser.map((event) => (
          <div key={(event as any).event_id}>
-        <div className="border-2 rounded-md border-black h-[250px] p-3" key={(event as any).event_id}>
+        <div className="border-2 rounded-md border-black h-[250px] w-[350px] p-3" key={(event as any).event_id}>
           <p className="font-semibold">{(event as any).title}</p>
           <p>{(event as any).description}</p>
           <p>Location: {(event as any).location}</p>
@@ -71,7 +78,7 @@ export default function UserHome() {
       ))}
       </div>
       <button onClick={showForm} className="mt-20">Add an event</button>
-      {show ? <PostEvent userDetails={(userDetails as any).user_id}/> :null}
+      {show ? <PostEvent userDetails={(userDetails as any).user_id} setEventsbyUser={setEventsbyUser}/> :null}
       <div className="pt-5 font-bold"><button onClick={logout}>Logout</button></div>
       
     </div>

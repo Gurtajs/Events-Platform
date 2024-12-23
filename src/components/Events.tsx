@@ -145,7 +145,7 @@ export default function Events() {
         {events.map((event: any) => (
           <div
             key={event.event_id}
-            className="border-2 rounded-md border-black h-[250px] w-[350px] p-3"
+            className="border-2 rounded-md border-black h-[300px] w-[350px] p-3"
           >
             <p className="font-semibold">{event.title}</p>
             <p>{event.description}</p>
