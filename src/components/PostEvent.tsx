@@ -94,7 +94,6 @@ export default function PostEvent({userDetails, setEventsbyUser}: any) {
 
   return(
     <>
-    <div>Add Event</div>
     <div className="w-[20%]">
       <form className="flex flex-col" onSubmit={onPost}>
         <label htmlFor="title">Title</label>
@@ -157,7 +156,7 @@ export default function PostEvent({userDetails, setEventsbyUser}: any) {
         />
         {organiserMessage && <p style={{ color: "red" }}>{organiserMessage}</p>}
 
-        <button type="submit">Add this event</button>
+        <button type="submit" className='border border-gray-400 hover:border-blue-500 rounded px-4 py-1 bg-sky-300 mt-3'>Add this event</button>
       </form>
     </div>
   </>

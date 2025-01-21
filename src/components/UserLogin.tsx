@@ -1,4 +1,4 @@
-import {useState, useContext} from 'react';
+import {useState, useContext, useEffect} from 'react';
 import { AuthContext } from "../AuthContext";
 import {  signInWithEmailAndPassword} from 'firebase/auth';
 import {  useNavigate } from 'react-router-dom'
@@ -53,7 +53,8 @@ const Login = () => {
             console.log("Error logging in:", error.message);
           }})
       }
-  
+      
+   
         
     
     return (
@@ -67,7 +68,7 @@ const Login = () => {
           <label htmlFor='password'>Password</label>
           <input className="border-2" type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           <div className='text-red-500'>{passwordMessage}</div>
-          <button onClick={onLogin}>Login</button>
+          <button onClick={onLogin} className='border border-gray-400 hover:border-blue-500 rounded px-4 py-1 bg-cyan-300 mt-3'>Login</button>
           <div className='mt-2'>Not a user? <Link to='/register' className='font-bold'>Register</Link></div>
         </form>
         </div>

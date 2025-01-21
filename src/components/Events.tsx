@@ -12,7 +12,6 @@ export default function Events() {
   const [showLoginMessage, setShowLoginMessage] = useState(false); 
   const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
   const SCOPES = "https://www.googleapis.com/auth/calendar.events";
-
   let tokenClient: any;
 
   useEffect(() => {
@@ -168,7 +167,7 @@ export default function Events() {
             <div className="mt-5 flex flex-col">
               {eventStates[event.event_id]?.showLoginButton && !isLoggedIn && (
                 <button
-                  className="border border-gray-400 hover:border-blue-500 rounded px-4 py-2"
+                  className="border border-gray-400 hover:border-blue-500 rounded px-4 py-2 bg-blue-300"
                   onClick={() => handleClick(event)}
                 >
                   Login to your Google email to Sign up
@@ -176,7 +175,7 @@ export default function Events() {
               )}
               {eventStates[event.event_id]?.showSignUpButton && isLoggedIn && (
                 <button
-                  className="border border-gray-400 hover:border-blue-500 rounded px-4 py-2"
+                  className="border border-gray-400 hover:border-blue-500 rounded px-4 py-2 bg-blue-400"
                   onClick={() => addEventToCalendar(event)}
                 >
                   Add event to Google Calendar

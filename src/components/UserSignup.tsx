@@ -1,5 +1,5 @@
-import {useState, useContext} from 'react';
-import {useNavigate } from 'react-router-dom';
+import {useState, useContext, useEffect} from 'react';
+import {Link, useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { postUser } from '../apiRequests.js';
 import { AuthContext } from "../AuthContext";
@@ -19,6 +19,7 @@ const Signup = () => {
     const [emailMessage, setEmailMessage] = useState("");
     const [passwordMessage, setPasswordMessage] = useState("");
     const [emailAlreadyInUse, setEmailAlreadyInUse] = useState(false); 
+    const [registratioMessage, setRegistrationMessage] = useState(false);
 
     const onSubmit = async (e: any) => {
 
@@ -65,7 +66,7 @@ const Signup = () => {
       if (!password) {
         setPasswordMessage("Password is required.");
         isValid = false;
-      } else if (password.length < 6) {
+      } else if (password.length < 8) {
         setPasswordMessage("Password must be at least 6 characters long.");
         isValid = false;
       } else {
@@ -77,10 +78,10 @@ const Signup = () => {
   
       await createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
-            // Signed in
             postUser(firstName, lastName, age, email)
-            navigate("/login")
-            // ...
+            // navigate("/login")
+            setRegistrationMessage(true)
+          
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -95,6 +96,11 @@ const Signup = () => {
         }
       );
     }
+
+    useEffect(() => {
+      setEmail("")
+      setPassword("")
+    }, [])
 
     return(
     <div className='ml-20'>
@@ -150,10 +156,10 @@ const Signup = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           {passwordMessage && <p style={{ color: "red" }}>{passwordMessage}</p>}
-
-          <button type="submit">Register</button>
+          <button type="submit" className='border border-gray-400 hover:border-blue-500 rounded px-4 py-1 bg-cyan-400 mt-3'>Register</button>
         </form>
       </div>
+      {registratioMessage ? <p >You have successfully registered! <Link to='/login' className='font-bold'>Login</Link></p> : ""}
     </div>
       )
 }
