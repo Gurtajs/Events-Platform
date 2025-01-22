@@ -6,7 +6,7 @@ This platform allows:
 - Staff members to sign-in to create and manage events.
 
 ## Hosted Website
-The platform is hosted on: https://cool-events-platform.netlify.app/
+The platform is hosted on: https://cool-events-platform.netlify.app/  <br/>
 You can watch a run through of the platform at: https://www.youtube.com/watch?v=EfuA_JWRoAk
 
 ## Set up instructions
