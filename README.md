@@ -12,7 +12,7 @@ You can watch a run through of the platform at: https://www.youtube.com/watch?v=
 ## Set up instructions
 1. To run this project clone the following github repository URL https://github.com/Gurtajs/Events-Platform by running:
 ```
-https://github.com/Gurtajs/Events-Platform.git
+git clone https://github.com/Gurtajs/Events-Platform.git
 ```
 2. Install Node.js, this project used Node v20.13.1 (ensure you have at least this node version or a later version). You can check your version with:
 ```
@@ -29,7 +29,7 @@ npm run dev
 ``` 
 
 ## Test User Login details
-You can login in the events platform using the following details:
+You can login in the events platform using the following test account details:
 Email: gurtajs98@gmail.com 
 Password: 123456
 
