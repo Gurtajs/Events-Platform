@@ -56,7 +56,7 @@ export default function UserHome() {
       <div className="flex flex-wrap gap-[80px]">
       {eventsByUser.map((event) => (
          <div key={(event as any).event_id}>
-        <div className="border-2 rounded-md border-black h-[250px] w-[350px] p-3" key={(event as any).event_id}>
+        <div className="border-2 rounded-md border-black min-h-[250px] w-[200px] sm:w-[350px] p-3" key={(event as any).event_id}>
           <p className="font-semibold">{(event as any).title}</p>
           <p>{(event as any).description}</p>
           <p>Location: {(event as any).location}</p>

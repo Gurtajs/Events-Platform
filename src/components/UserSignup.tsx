@@ -1,11 +1,10 @@
 import {useState, useContext, useEffect} from 'react';
-import {Link, useNavigate } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { postUser } from '../apiRequests.js';
 import { AuthContext } from "../AuthContext";
 
 const Signup = () => {
-    const navigate = useNavigate();
 
     const { email, setEmail, password, setPassword, auth } =
     useContext(AuthContext);
@@ -67,7 +66,7 @@ const Signup = () => {
         setPasswordMessage("Password is required.");
         isValid = false;
       } else if (password.length < 8) {
-        setPasswordMessage("Password must be at least 6 characters long.");
+        setPasswordMessage("Password must be at least 8 characters long.");
         isValid = false;
       } else {
         setPasswordMessage("");
@@ -103,9 +102,9 @@ const Signup = () => {
     }, [])
 
     return(
-    <div className='ml-20'>
+    <div className='ml-10 sm:ml-20'>
       <div className='font-bold mt-10 mb-2 text-[20px]'>Register</div>
-      <div className="w-[20%]">
+      <div className="w-[60%] md:w-[20%]">
         <form className="flex flex-col" onSubmit={onSubmit}>
           <label htmlFor="firstName">First name</label>
           <input

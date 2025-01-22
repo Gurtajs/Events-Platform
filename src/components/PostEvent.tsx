@@ -94,7 +94,7 @@ export default function PostEvent({userDetails, setEventsbyUser}: any) {
 
   return(
     <>
-    <div className="w-[20%]">
+    <div className="w-[60%] md:w-[20%]">
       <form className="flex flex-col" onSubmit={onPost}>
         <label htmlFor="title">Title</label>
         <input
@@ -107,9 +107,8 @@ export default function PostEvent({userDetails, setEventsbyUser}: any) {
         {titleMessage && <p style={{ color: "red" }}>{titleMessage}</p>}
 
         <label htmlFor="description">Description</label>
-        <input
-          className="border-2"
-          type="text"
+        <textarea
+          className="border-2 min-h-[150px]"
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import loader from "../assets/loading.gif"
 
 declare const google: any;
 import { getAllEvents } from "../apiRequests";
@@ -10,6 +10,8 @@ export default function Events() {
   const [eventStates, setEventStates] = useState<any>({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginMessage, setShowLoginMessage] = useState(false); 
+  const [loading, setLoading] = useState(true)
+
   const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
   const SCOPES = "https://www.googleapis.com/auth/calendar.events";
   let tokenClient: any;
@@ -17,6 +19,7 @@ export default function Events() {
   useEffect(() => {
     getAllEvents().then((events) => {
       setEvents(events);
+      setLoading(false)
       const initialStates = events.reduce((acc: any, event:any) => {
         acc[event.event_id] = {
           showLoginButton: true,
@@ -132,6 +135,10 @@ export default function Events() {
     }
   };
 
+  if (loading) {
+    return   <div className="flex justify-center mt-20"><img src={loader} alt="loader" width={100} height={100}/></div>
+  }
+
   return (
     <div>
        {showLoginMessage && isLoggedIn && (
@@ -139,12 +146,11 @@ export default function Events() {
           You have successfully logged in your Google email!
         </p>
       )}
-      <div className="flex flex-wrap gap-[120px] mt-10 ml-20">
-        
+      <div className="flex flex-wrap gap-[100px] mt-10 ml-20 mr-20">
         {events.map((event: any) => (
           <div
             key={event.event_id}
-            className="border-2 rounded-md border-black h-[300px] w-[350px] p-3"
+            className="border-2 rounded-md border-black min-h-[300px] w-[350px] p-3"
           >
             <p className="font-semibold">{event.title}</p>
             <p>{event.description}</p>
