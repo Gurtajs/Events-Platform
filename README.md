@@ -30,7 +30,7 @@ npm run dev
 
 ## Test User Login details
 You can login in the events platform using the following test account details:
-Email: gurtajs98@gmail.com 
+Email: gurtajs98@gmail.com <br/>
 Password: 123456
 
 
