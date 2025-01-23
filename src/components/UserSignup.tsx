@@ -104,7 +104,7 @@ const Signup = () => {
     return(
     <div className='ml-10 sm:ml-20'>
       <div className='font-bold mt-10 mb-2 text-[20px]'>Register</div>
-      <div className="w-[60%] md:w-[20%]">
+      <div className="w-[60%] md:w-[20%] max-w-[250px] min-w-[220px]">
         <form className="flex flex-col" onSubmit={onSubmit}>
           <label htmlFor="firstName">First name</label>
           <input

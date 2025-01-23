@@ -60,7 +60,7 @@ const Login = () => {
     return (
       <div className='ml-10 sm:ml-20'>
         <div className='font-bold mt-10 mb-2 text-[20px]'>Login</div>
-        <div className="w-[70%] md:w-[20%]">
+        <div className="w-[70%] md:w-[20%] max-w-[250px] min-w-[220px]">
         <form className='flex flex-col'>
           <label htmlFor='email'>Email</label>
           <input className="border-2" type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />

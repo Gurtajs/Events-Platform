@@ -49,7 +49,7 @@ export default function PostEvent({userDetails, setEventsbyUser}: any) {
     if (!date.trim()) {
       setDateMessage("Date is required.");
       isValid = false;
-    } else if (isNaN(Date.parse(date))) {
+    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || isNaN(Date.parse(date))) {
       setDateMessage("Please enter a valid date (YYYY-MM-DD).");
       isValid = false;
     } else {
@@ -94,7 +94,7 @@ export default function PostEvent({userDetails, setEventsbyUser}: any) {
 
   return(
     <>
-    <div className="w-[60%] md:w-[20%]">
+    <div className="w-[60%] md:w-[20%] sm:w-[20%] min-w-[230px]">
       <form className="flex flex-col" onSubmit={onPost}>
         <label htmlFor="title">Title</label>
         <input
